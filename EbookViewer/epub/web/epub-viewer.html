@@ -181,7 +181,7 @@
       <button class="controller-button" onclick="window.location.replace(document.referrer)">
         <img src="./images/chapter_prev.svg" alt="뒤로가기" />
       </button>
-      <h1 class="header__title ellipsis-1" id="h1-title">EPUB</h1>
+      <h1 class="header__title ellipsis-1" id="h1-title">나단이 찾아온 날</h1>
 
       <div class="page-mode">
         <!-- * active 클래스: page-mode__button--active -->
@@ -204,7 +204,7 @@
             <span class="action-buttons__text">목차</span>
           </button>
         </li>
-        <li style="display:none">
+        <li>
           <button class="action-buttons__button" onclick="openReadingNote()">
             <img src="./images/menu_note.svg" alt="" class="action-buttons__icon" />
             <span class="action-buttons__text">독서 노트</span>
@@ -225,7 +225,7 @@
             <span class="action-buttons__text">보기 설정</span>
           </button>
         </li>
-        <li style="display:none">
+        <li>
           <button class="action-buttons__button" onclick="openReviewModal()">
             <img src="./images/menu_review.svg" alt="" class="action-buttons__icon" />
             <span class="action-buttons__text">리뷰</span>
@@ -237,7 +237,7 @@
             <span class="action-buttons__text">검색</span>
           </button>
         </li>
-        <li style="display:none">
+        <li>
           <!--<button class="action-buttons__button action-buttons__button&#45;&#45;off">
               <img
                 src="./images/bookmark__on.svg"
@@ -311,7 +311,7 @@
         align-items: center;
         top : 10px;" class="Background-1 show">
     <div style="margin: auto;top: 50%;left: 50%;position: absolute;transform: translate(-50%,-50%);">
-
+   
       <span style="position: relative; margin: auto; text-align: center; font-size:min(1.5vh, 1.5vw); top : 10px;">정보를
         불러오고
         있습니다.</span>
@@ -1873,7 +1873,7 @@
     }
     //parameter  none, both;
     function changeView(view) {
-      rendition?.spread?.(view);
+      rendition.spread(view);
       if (iOS()) {
         updateLayout();
       }
@@ -2272,7 +2272,6 @@
         item.href = chapter.href;
         item.label = chapter.label;
         let section = book.spine.get(chapter.href);
-        if (section == null) return;
         let cfi = "epubcfi(" + section.cfiBase + "!/1/1)";
         let percentage = book.locations.percentageFromCfi(cfi);
         let page = book.locations.locationFromCfi(cfi);
@@ -2370,7 +2369,7 @@
 
           const emptyEle = `<div class="modal-empty">
             <img src="./images/empty_note.svg" alt="empty" width="50">
-            <p>목차가 없는 파일입니다.</p>
+            <p>아직 남겨진 독서 노트가 없습니다.</p>
           </div>`;
           const template = document.createElement("template");
           template.innerHTML = emptyEle;
@@ -5245,21 +5244,40 @@
     //마지막페이지 이벤트....=======================
     let lastScroll = false;
     document.addEventListener("lastPage", () => {
-      alert("마지막 페이지입니다.");
+      if (!lastScroll) {
+        lastScroll = true;
+        if (_completeReadYN == "N") {
+          if (confirm("마지막 페이지 입니다. 완독하셨습니까?")) {
+            // httpPost("ModifyCompleteRead", { ContentNo: _contentNo, MemberNo: _memberNo }).then(function (data) {
+            //   if (data > 0) {
+            //     _completeReadYN = "Y";
+            //   }
+            // })
+          }
+
+        }
+        else {
+          alert("마지막 페이지입니다.");
+        }
+
+        setTimeout(function () {
+          lastScroll = false;
+        }, 3000)
+      }
     })
     //마지막 페이지 이벤트 =========================
 
 
     //신고하기 시작==========
-    // getValueByCodeGroupCode("N03").then(function (data) {
-    //   for (let item of data) {
-    //     const ele = `<option value=${item.code}>${item.codeNameKor}</option>`;
-    //     const template = document.createElement("template");
-    //     template.innerHTML = ele;
-    //     document.getElementById("option-report").appendChild(template.content.cloneNode(true));
+    getValueByCodeGroupCode("N03").then(function (data) {
+      for (let item of data) {
+        const ele = `<option value=${item.code}>${item.codeNameKor}</option>`;
+        const template = document.createElement("template");
+        template.innerHTML = ele;
+        document.getElementById("option-report").appendChild(template.content.cloneNode(true));
 
-    //   }
-    // })
+      }
+    })
 
     document.getElementById("option-report").addEventListener("change", function (e) {
       if (e.target.value == "005") {
