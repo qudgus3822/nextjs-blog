@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Router, useRouter } from "next/router";
+import { readFile, uploadFile } from "../db/fileProcess";
 
 export default function IndexPage() {
   let router = useRouter();
@@ -9,14 +10,18 @@ export default function IndexPage() {
 
   let highSchoolMap;
   let universityMap;
+
+  useEffect(() => {
+
+  }, []);
   useEffect(() => {
     let script = document.querySelector(
-      `script[src="/nextjs-blog/assets/js/app.js"]`
+      `script[src="/assets/js/app.js"]`
     );
 
     if (!script) {
       script = document.createElement("script");
-      script.src = "/nextjs-blog/assets/js/app.js";
+      script.src = "/assets/js/app.js";
       script.async = true;
       document.body.appendChild(script);
     }
@@ -81,7 +86,7 @@ export default function IndexPage() {
                         <div className="col-lg-6 align-self-center mb-3 mb-lg-0">
                           <div className="met-profile-main">
                             <div className="met-profile-main-pic">
-                              <img src="/nextjs-blog/images/profile.png" alt="" height="110" className="rounded-circle"></img>
+                              <img src="/images/profile.png" alt="" height="110" className="rounded-circle"></img>
                               {/* <span className="met-profile_main-pic-change">
                                 <i className="fas fa-camera"></i>
                               </span> */}
@@ -98,7 +103,7 @@ export default function IndexPage() {
                             <li className=""><i className="las la-phone mr-2 text-secondary font-22 align-middle"></i> <b> phone </b> : +82 2835 3822</li>
                             <li className="mt-2"><i className="las la-envelope text-secondary font-22 align-middle mr-2"></i> <b> Email </b> : qudgus3822@gmail.com</li>
                             <li className="mt-2"><i className="las la-globe text-secondary font-22 align-middle mr-2"></i> <b> Website </b> :
-                              <a href="https://qudgus3822.github.io/nextjs-blog/" className="font-14 text-primary">https://qudgus3822.github.io/nextjs-blog/</a>
+                              <a href="https://qudgus3822.github.io/" className="font-14 text-primary">https://qudgus3822.github.io/</a>
                             </li>
                           </ul>
 
